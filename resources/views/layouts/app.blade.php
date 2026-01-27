@@ -36,6 +36,11 @@
                 <!-- Auth Links -->
                 <ul class="navbar-nav ms-auto">
                     @auth
+                        @if(auth()->user()->isAdmin())
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('admin.productos.index') }}">⚙️ Panel Admin</a>
+                            </li>
+                        @endif
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
                                 {{ auth()->user()->nombre }}
