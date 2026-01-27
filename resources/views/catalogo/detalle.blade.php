@@ -8,13 +8,8 @@
         <!-- Imagen del producto -->
         <div class="col-md-5 mb-4">
             <div class="producto-detalle-imagen">
-                @if($producto->imagen)
-                    <img src="{{ asset('storage/' . $producto->imagen) }}" 
-                         class="img-fluid" alt="{{ $producto->nombre }}">
-                @else
-                    <img src="https://via.placeholder.com/400x400?text=Sin+imagen" 
-                         class="img-fluid" alt="Sin imagen">
-                @endif
+                <img src="{{ $producto->imagen_url }}" 
+                     class="img-fluid" alt="{{ $producto->nombre }}">
             </div>
         </div>
 
@@ -50,7 +45,7 @@
             </div>
 
             <div class="mb-3">
-                <h3 class="text-primary">${{ number_format($producto->precio, 2) }}</h3>
+                <h3 class="text-primary">{{ number_format($producto->precio, 2, ',', '.') }}€</h3>
             </div>
 
             <div class="mb-4">
@@ -99,16 +94,11 @@
                     @foreach($producto->categoria->productos()->where('id', '!=', $producto->id)->limit(3)->get() as $relacionado)
                         <div class="col-md-4 mb-3">
                             <div class="card">
-                                @if($relacionado->imagen)
-                                    <img src="{{ asset('storage/' . $relacionado->imagen) }}" 
-                                         class="card-img-top" alt="{{ $relacionado->nombre }}">
-                                @else
-                                    <img src="https://via.placeholder.com/200x150?text=Sin+imagen" 
-                                         class="card-img-top" alt="Sin imagen">
-                                @endif
+                                <img src="{{ $relacionado->imagen_url }}" 
+                                     class="card-img-top" alt="{{ $relacionado->nombre }}">
                                 <div class="card-body">
                                     <h6 class="card-title">{{ $relacionado->nombre }}</h6>
-                                    <p class="text-primary fw-bold">${{ number_format($relacionado->precio, 2) }}</p>
+                                    <p class="text-primary fw-bold">{{ number_format($relacionado->precio, 2, ',', '.') }}€</p>
                                     <a href="{{ route('catalogo.detalle', $relacionado->id) }}" 
                                        class="btn btn-sm btn-outline-primary">Ver</a>
                                 </div>

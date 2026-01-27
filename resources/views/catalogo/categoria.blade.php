@@ -38,13 +38,8 @@
                         <div class="col-md-6 col-lg-4 mb-4">
                             <div class="card producto-card h-100">
                                 <div class="producto-imagen">
-                                    @if($producto->imagen)
-                                        <img src="{{ asset('storage/' . $producto->imagen) }}" 
-                                             class="card-img-top" alt="{{ $producto->nombre }}">
-                                    @else
-                                        <img src="https://via.placeholder.com/300x200?text=Sin+imagen" 
-                                             class="card-img-top" alt="Sin imagen">
-                                    @endif
+                                    <img src="{{ $producto->imagen_url }}" 
+                                         class="card-img-top" alt="{{ $producto->nombre }}">
                                     @if($producto->destacado)
                                         <span class="badge bg-danger position-absolute top-0 end-0 m-2">Destacado</span>
                                     @endif
@@ -56,7 +51,7 @@
                                         {{ Str::limit($producto->descripcion, 80) }}
                                     </p>
                                     <p class="text-primary fw-bold fs-5 mt-auto">
-                                        ${{ number_format($producto->precio, 2) }}
+                                        {{ number_format($producto->precio, 2, ',', '.') }}€
                                     </p>
                                     
                                     <div class="d-grid gap-2">
