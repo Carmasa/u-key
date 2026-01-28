@@ -19,16 +19,16 @@
     <div class="card mb-4">
         <div class="card-body">
             <form method="GET" action="{{ route('admin.productos.index') }}" class="row g-3">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <label for="nombre" class="form-label">Nombre del Producto</label>
                     <input type="text" class="form-control" id="nombre" name="nombre" 
                            value="{{ request('nombre') }}" placeholder="Buscar por nombre...">
                 </div>
                 
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <label for="categoria_id" class="form-label">Categoría</label>
                     <select class="form-select" id="categoria_id" name="categoria_id">
-                        <option value="">Todas las categorías</option>
+                        <option value="">Todas</option>
                         @foreach($categorias as $categoria)
                             <option value="{{ $categoria->id }}" @selected(request('categoria_id') == $categoria->id)>
                                 {{ $categoria->nombre }}
@@ -36,17 +36,26 @@
                         @endforeach
                     </select>
                 </div>
-                
-                <div class="col-md-3">
-                    <label for="destacado" class="form-label">Destacado</label>
-                    <select class="form-select" id="destacado" name="destacado">
+
+                <div class="col-md-2">
+                    <label for="stock" class="form-label">Stock</label>
+                    <select class="form-select" id="stock" name="stock">
                         <option value="">Todos</option>
-                        <option value="1" @selected(request('destacado') === '1')>Destacado</option>
-                        <option value="0" @selected(request('destacado') === '0')>No destacado</option>
+                        <option value="con_stock" @selected(request('stock') === 'con_stock')>Con stock</option>
+                        <option value="sin_stock" @selected(request('stock') === 'sin_stock')>Sin stock</option>
                     </select>
                 </div>
                 
-                <div class="col-md-2 d-flex align-items-end gap-2">
+                <div class="col-md-2">
+                    <label for="destacado" class="form-label">Destacado</label>
+                    <select class="form-select" id="destacado" name="destacado">
+                        <option value="">Todos</option>
+                        <option value="1" @selected(request('destacado') === '1')>Sí</option>
+                        <option value="0" @selected(request('destacado') === '0')>No</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-3 d-flex align-items-end gap-2">
                     <button type="submit" class="btn btn-primary flex-grow-1">Filtrar</button>
                     <a href="{{ route('admin.productos.index') }}" class="btn btn-secondary">Limpiar</a>
                 </div>
@@ -63,6 +72,7 @@
                         <th>Categoría</th>
                         <th>Precio</th>
                         <th>Stock</th>
+                        <th>Visible</th>
                         <th>Destacado</th>
                         <th>Acciones</th>
                     </tr>
@@ -83,10 +93,17 @@
                                 </span>
                             </td>
                             <td>
-                                @if($producto->destacado)
-                                    <span class="badge bg-warning">Sí</span>
+                                @if($producto->visible)
+                                    <span class="badge bg-success">Visible</span>
                                 @else
-                                    <span class="badge bg-secondary">No</span>
+                                    <span class="badge bg-warning">Oculto</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($producto->destacado)
+                                    <span class="badge bg-danger">Destacado</span>
+                                @else
+                                    <span class="badge bg-secondary">—</span>
                                 @endif
                             </td>
                             <td>
