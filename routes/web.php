@@ -20,4 +20,5 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 // Admin routes - Protegidas con auth y isAdmin
 Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('productos', ProductoController::class);
+    Route::delete('fotos/{foto}', [App\Http\Controllers\FotoProductoController::class, 'destroy'])->name('fotos.destroy');
 });
