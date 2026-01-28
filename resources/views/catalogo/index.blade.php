@@ -13,9 +13,10 @@
                 @foreach($productosDestacados as $producto)
                     <div class="col-md-6 col-lg-3 mb-4">
                         <div class="card producto-card h-100">
-                            <div class="producto-imagen">
+                            <div class="producto-imagen" style="height: 250px; overflow: hidden; background-color: #f8f9fa;">
                                 <img src="{{ $producto->imagen_url }}" 
-                                     class="card-img-top" alt="{{ $producto->nombre }}">
+                                     class="card-img-top" alt="{{ $producto->nombre }}"
+                                     style="width: 100%; height: 100%; object-fit: cover;">
                                 <span class="badge bg-danger position-absolute top-0 end-0 m-2">Destacado</span>
                             </div>
                             

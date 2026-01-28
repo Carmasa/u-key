@@ -79,39 +79,73 @@
                             @enderror
                         </div>
 
-                        <!-- Imagen actual -->
-                        @if($producto->imagen)
-                            <div class="mb-3">
-                                <label class="form-label">Imagen Actual</label>
-                                <div>
-                                    <img src="{{ $producto->imagen_url }}" alt="{{ $producto->nombre }}" style="max-width: 200px; max-height: 200px;">
+                        <!-- Imágenes actuales -->
+                        @if($producto->fotos->count() > 0)
+                            <div class="mb-4">
+                                <h5>Imágenes Actuales</h5>
+                                <div class="row g-3">
+                                    @foreach($producto->fotos as $foto)
+                                        <div class="col-md-4 col-lg-3">
+                                            <div class="card h-100 shadow-sm">
+                                                <div style="height: 200px; overflow: hidden; background-color: #f8f9fa;">
+                                                    <img src="{{ $foto->url }}" class="card-img-top" alt="Foto del producto" style="height: 100%; width: 100%; object-fit: cover;">
+                                                </div>
+                                                <div class="card-body p-2">
+                                                    @if($foto->principal)
+                                                        <span class="badge bg-warning mb-2 d-block">Principal</span>
+                                                    @endif
+                                                    <form action="{{ route('admin.fotos.destroy', $foto) }}" method="POST" style="display: inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger btn-sm w-100" 
+                                                                onclick="return confirm('¿Estás seguro?');">
+                                                            Eliminar
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
                                 </div>
+                                <hr>
                             </div>
                         @endif
 
-                        <!-- Imagen nueva -->
+                        <!-- Añadir nuevas imágenes -->
                         <div class="mb-3">
-                            <label for="imagen" class="form-label">Nueva Imagen del Producto</label>
-                            <input type="file" class="form-control @error('imagen') is-invalid @enderror" 
-                                   id="imagen" name="imagen" accept="image/*">
-                            <small class="form-text text-muted">Formatos permitidos: JPEG, PNG, JPG, GIF (máx. 2MB). Dejar vacío para mantener la imagen actual.</small>
-                            @error('imagen')
+                            <label for="fotos" class="form-label">Añadir nuevas imágenes</label>
+                            <input type="file" class="form-control @error('fotos') is-invalid @enderror" 
+                                   id="fotos" name="fotos[]" accept="image/*" multiple>
+                            <small class="form-text text-muted">Formatos permitidos: JPEG, PNG, JPG, GIF (máx. 2MB cada una). Puedes seleccionar múltiples archivos.</small>
+                            @error('fotos')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <!-- Destacado -->
                         <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="destacado" name="destacado" value="1" @checked(old('destacado', $producto->destacado))>
+                            <input type="hidden" name="destacado" value="0">
+                            <input type="checkbox" class="form-check-input" id="destacado" name="destacado" value="1" 
+                                   @if(old('destacado', $producto->destacado)) checked @endif>
                             <label class="form-check-label" for="destacado">
                                 Marcar como producto destacado
+                            </label>
+                        </div>
+
+                        <!-- Visible -->
+                        <div class="mb-3 form-check">
+                            <input type="hidden" name="visible" value="0">
+                            <input type="checkbox" class="form-check-input" id="visible" name="visible" value="1" 
+                                   @if(old('visible', $producto->visible)) checked @endif>
+                            <label class="form-check-label" for="visible">
+                                Mostrar en el catálogo
                             </label>
                         </div>
 
                         <!-- Botones -->
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                             <a href="{{ route('admin.productos.index') }}" class="btn btn-secondary">Cancelar</a>
-                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            <button type="submit" class="btn btn-success">Guardar Cambios</button>
                         </div>
                     </form>
                 </div>

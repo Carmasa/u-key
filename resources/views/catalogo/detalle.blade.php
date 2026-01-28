@@ -5,12 +5,47 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <!-- Imagen del producto -->
+        <!-- Galería de imágenes del producto -->
         <div class="col-md-5 mb-4">
-            <div class="producto-detalle-imagen">
-                <img src="{{ $producto->imagen_url }}" 
-                     class="img-fluid" alt="{{ $producto->nombre }}">
+            <!-- Imagen principal -->
+            <div class="producto-detalle-imagen mb-3" style="background-color: #f8f9fa; border-radius: 8px; overflow: hidden;">
+                <div style="height: 500px; width: 100%; display: flex; align-items: center; justify-content: center;">
+                    <img id="imagenPrincipal" 
+                         src="{{ $producto->fotoPrincipal() ? $producto->fotoPrincipal()->url : $producto->imagen_url }}" 
+                         class="img-fluid" alt="{{ $producto->nombre }}"
+                         style="max-height: 100%; max-width: 100%; width: auto; height: auto; object-fit: contain;">
+                </div>
             </div>
+
+            <!-- Miniaturas -->
+            @if($producto->fotos->count() > 1)
+                <div class="d-flex gap-2 flex-wrap">
+                    @foreach($producto->fotos as $foto)
+                        <div style="width: 80px; height: 80px; overflow: hidden; border-radius: 8px; background-color: #f8f9fa; border: 2px solid #e9ecef;">
+                            <img class="miniatura-foto" 
+                                 src="{{ $foto->url }}" 
+                                 alt="Miniatura"
+                                 style="width: 100%; height: 100%; object-fit: cover; cursor: pointer; opacity: 0.7; transition: opacity 0.3s;"
+                                 onclick="cambiarImagen(this)"
+                                 onmouseover="this.style.opacity = '1'"
+                                 onmouseout="this.style.opacity = '0.7'">
+                        </div>
+                    @endforeach
+                </div>
+            @elseif($producto->imagen)
+                <!-- Compatibilidad con imagen antigua -->
+                <div class="d-flex gap-2 flex-wrap">
+                    <div style="width: 80px; height: 80px; overflow: hidden; border-radius: 8px; background-color: #f8f9fa; border: 2px solid #e9ecef;">
+                        <img class="miniatura-foto" 
+                             src="{{ $producto->imagen_url }}" 
+                             alt="Miniatura"
+                             style="width: 100%; height: 100%; object-fit: cover; cursor: pointer; opacity: 0.7; transition: opacity 0.3s;"
+                             onclick="cambiarImagen(this)"
+                             onmouseover="this.style.opacity = '1'"
+                             onmouseout="this.style.opacity = '0.7'">
+                    </div>
+                </div>
+            @endif
         </div>
 
         <!-- Información del producto -->
@@ -112,6 +147,18 @@
 </div>
 
 <script>
+function cambiarImagen(elemento) {
+    document.getElementById('imagenPrincipal').src = elemento.src;
+    
+    // Resetear opacidad de todas las miniaturas
+    document.querySelectorAll('.miniatura-foto').forEach(img => {
+        img.style.opacity = '0.7';
+    });
+    
+    // Destacar la miniatura seleccionada
+    elemento.style.opacity = '1';
+}
+
 function agregarCarrito(productoId) {
     if (!{{ auth()->check() ? 'true' : 'false' }}) {
         window.location.href = '{{ route("login") }}';

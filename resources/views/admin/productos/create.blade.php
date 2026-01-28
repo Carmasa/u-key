@@ -78,22 +78,34 @@
                             @enderror
                         </div>
 
-                        <!-- Imagen -->
+                        <!-- Imágenes -->
                         <div class="mb-3">
-                            <label for="imagen" class="form-label">Imagen del Producto</label>
-                            <input type="file" class="form-control @error('imagen') is-invalid @enderror" 
-                                   id="imagen" name="imagen" accept="image/*">
-                            <small class="form-text text-muted">Formatos permitidos: JPEG, PNG, JPG, GIF (máx. 2MB)</small>
-                            @error('imagen')
+                            <label for="fotos" class="form-label">Imágenes del Producto</label>
+                            <input type="file" class="form-control @error('fotos') is-invalid @enderror" 
+                                   id="fotos" name="fotos[]" accept="image/*" multiple>
+                            <small class="form-text text-muted">Formatos permitidos: JPEG, PNG, JPG, GIF (máx. 2MB cada una). Puedes seleccionar múltiples archivos.</small>
+                            @error('fotos')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
 
                         <!-- Destacado -->
                         <div class="mb-3 form-check">
-                            <input type="checkbox" class="form-check-input" id="destacado" name="destacado" value="1" @checked(old('destacado'))>
+                            <input type="hidden" name="destacado" value="0">
+                            <input type="checkbox" class="form-check-input" id="destacado" name="destacado" value="1" 
+                                   @if(old('destacado')) checked @endif>
                             <label class="form-check-label" for="destacado">
                                 Marcar como producto destacado
+                            </label>
+                        </div>
+
+                        <!-- Visible -->
+                        <div class="mb-3 form-check">
+                            <input type="hidden" name="visible" value="0">
+                            <input type="checkbox" class="form-check-input" id="visible" name="visible" value="1" 
+                                   @if(old('visible', true)) checked @endif>
+                            <label class="form-check-label" for="visible">
+                                Mostrar en el catálogo
                             </label>
                         </div>
 
