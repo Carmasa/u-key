@@ -33,6 +33,15 @@ class ProductoController extends Controller
             $query->where('destacado', request('destacado'));
         }
 
+        // Filtro por stock
+        if (request('stock') !== null && request('stock') !== '') {
+            if (request('stock') === 'sin_stock') {
+                $query->where('stock', '=', 0);
+            } elseif (request('stock') === 'con_stock') {
+                $query->where('stock', '>', 0);
+            }
+        }
+
         $productos = $query->paginate(10);
         $categorias = Categoria::all();
         
@@ -58,16 +67,27 @@ class ProductoController extends Controller
         // Generar slug desde el nombre
         $validated['slug'] = Str::slug($validated['nombre']);
 
-        // Manejar la imagen si se carga
-        if ($request->hasFile('imagen')) {
-            $imagenPath = $request->file('imagen')->store('productos', 'public');
-            $validated['imagen'] = basename($imagenPath);
-        }
-
-        // Convertir el checkbox destacado a booleano
+        // Convertir los checkboxes a booleano
+        // Con los hidden inputs, siempre se envían valores (0 o 1)
         $validated['destacado'] = (bool) $request->input('destacado', 0);
+        $validated['visible'] = (bool) $request->input('visible', 0);
 
-        Producto::create($validated);
+        // Crear el producto
+        $producto = Producto::create($validated);
+
+        // Manejar múltiples imágenes
+        if ($request->hasFile('fotos')) {
+            $orden = 0;
+            foreach ($request->file('fotos') as $foto) {
+                $fotoPath = $foto->store('productos', 'public');
+                $producto->fotos()->create([
+                    'nombre_archivo' => basename($fotoPath),
+                    'orden' => $orden,
+                    'principal' => $orden === 0, // Primera foto es la principal
+                ]);
+                $orden++;
+            }
+        }
 
         return redirect()
             ->route('admin.productos.index')
@@ -93,21 +113,34 @@ class ProductoController extends Controller
         // Actualizar slug
         $validated['slug'] = Str::slug($validated['nombre']);
 
-        // Manejar la nueva imagen si se carga
-        if ($request->hasFile('imagen')) {
-            // Eliminar imagen anterior si existe
-            if ($producto->imagen) {
-                Storage::disk('public')->delete('productos/' . $producto->imagen);
-            }
-            
-            $imagenPath = $request->file('imagen')->store('productos', 'public');
-            $validated['imagen'] = basename($imagenPath);
-        }
-
-        // Convertir el checkbox destacado a booleano
+        // Convertir los checkboxes a booleano
+        // Con los hidden inputs, siempre se envían valores (0 o 1)
         $validated['destacado'] = (bool) $request->input('destacado', 0);
+        $validated['visible'] = (bool) $request->input('visible', 0);
+
+        // Log para debuggear
+        \Log::info('Actualizar producto', [
+            'producto_id' => $producto->id,
+            'destacado' => $request->input('destacado'),
+            'visible' => $request->input('visible'),
+            'validated_destacado' => $validated['destacado'],
+            'validated_visible' => $validated['visible'],
+        ]);
 
         $producto->update($validated);
+
+        // Manejar múltiples imágenes
+        if ($request->hasFile('fotos')) {
+            foreach ($request->file('fotos') as $foto) {
+                $fotoPath = $foto->store('productos', 'public');
+                $maxOrden = $producto->fotos()->max('orden') ?? 0;
+                $producto->fotos()->create([
+                    'nombre_archivo' => basename($fotoPath),
+                    'orden' => $maxOrden + 1,
+                    'principal' => false,
+                ]);
+            }
+        }
 
         return redirect()
             ->route('admin.productos.index')
@@ -119,7 +152,12 @@ class ProductoController extends Controller
      */
     public function destroy(Producto $producto)
     {
-        // Eliminar imagen si existe
+        // Eliminar todas las fotos del producto
+        foreach ($producto->fotos as $foto) {
+            Storage::disk('public')->delete('productos/' . $foto->nombre_archivo);
+        }
+
+        // Eliminar imagen antigua si existe (para compatibilidad)
         if ($producto->imagen) {
             Storage::disk('public')->delete('productos/' . $producto->imagen);
         }
