@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProductoController;
 
 // Catalogo routes
 Route::get('/', [CatalogoController::class, 'index'])->name('catalogo.index');
@@ -15,3 +16,9 @@ Route::post('/login', [AuthController::class, 'login'])->middleware('guest');
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register')->middleware('guest');
 Route::post('/register', [AuthController::class, 'register'])->middleware('guest');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
+
+// Admin routes - Protegidas con auth y isAdmin
+Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('productos', ProductoController::class);
+    Route::delete('fotos/{foto}', [App\Http\Controllers\FotoProductoController::class, 'destroy'])->name('fotos.destroy');
+});
