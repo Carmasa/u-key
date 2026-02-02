@@ -19,6 +19,7 @@ class ProductoSeeder extends Seeder
                 'imagen' => 'teclado-rgb.jpg',
                 'categoria_id' => 1,
                 'destacado' => true,
+                'visible' => true,
             ],
             [
                 'nombre' => 'Teclado 60% Compacto',
@@ -29,6 +30,7 @@ class ProductoSeeder extends Seeder
                 'imagen' => 'teclado-60.jpg',
                 'categoria_id' => 1,
                 'destacado' => true,
+                'visible' => true,
             ],
             [
                 'nombre' => 'Ratón Gaming Pro',
@@ -39,6 +41,7 @@ class ProductoSeeder extends Seeder
                 'imagen' => 'raton-gaming.jpg',
                 'categoria_id' => 2,
                 'destacado' => true,
+                'visible' => true,
             ],
             [
                 'nombre' => 'Ratón Inalámbrico',
@@ -49,6 +52,7 @@ class ProductoSeeder extends Seeder
                 'imagen' => 'raton-inalambrico.jpg',
                 'categoria_id' => 2,
                 'destacado' => false,
+                'visible' => true,
             ],
             [
                 'nombre' => 'Keycaps ABS Premium',
@@ -59,6 +63,7 @@ class ProductoSeeder extends Seeder
                 'imagen' => 'keycaps.jpg',
                 'categoria_id' => 3,
                 'destacado' => false,
+                'visible' => true,
             ],
             [
                 'nombre' => 'Stabilizers Estabilizadores',
@@ -69,6 +74,7 @@ class ProductoSeeder extends Seeder
                 'imagen' => 'stabilizers.jpg',
                 'categoria_id' => 3,
                 'destacado' => false,
+                'visible' => true,
             ],
         ];
 
