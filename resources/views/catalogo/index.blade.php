@@ -21,7 +21,6 @@
     <!-- Productos Destacados -->
     <section class="mb-5">
         <div class="section-title">
-            <span class="icon">🔥</span>
             <h2>Productos Destacados</h2>
         </div>
         
@@ -36,7 +35,7 @@
                                      style="width: 100%; height: 100%; object-fit: cover;">
                                 @if($producto->destacado)
                                     <span class="badge-destacado">
-                                        <i class="bi bi-star-fill me-1"></i>HOT
+                                        <i class="bi bi-star-fill me-1"></i>DESTACADO
                                     </span>
                                 @endif
                             </div>

@@ -192,11 +192,11 @@
                         </div>
 
                         <div class="d-grid">
-                            <button class="btn btn-success btn-lg" disabled>
-                                <i class="bi bi-lock me-2"></i>Proceder al Pago
-                            </button>
+                            <a href="{{ route('checkout.index') }}" class="btn btn-success btn-lg">
+                                <i class="bi bi-credit-card me-2"></i>Proceder al Pago
+                            </a>
                             <small class="text-muted text-center mt-2">
-                                <i class="bi bi-shield-check me-1"></i>Pago seguro garantizado
+                                <i class="bi bi-shield-check me-1"></i>Pago seguro con Stripe
                             </small>
                         </div>
                     </div>
