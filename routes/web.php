@@ -5,6 +5,7 @@ use App\Http\Controllers\CatalogoController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\CarritoController;
+use App\Http\Controllers\CheckoutController;
 
 // Catalogo routes
 Route::get('/', [CatalogoController::class, 'index'])->name('catalogo.index');
@@ -18,6 +19,12 @@ Route::patch('/carrito/{carrito}', [CarritoController::class, 'actualizar'])->na
 Route::delete('/carrito/{carrito}', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
 Route::delete('/carrito', [CarritoController::class, 'vaciar'])->name('carrito.vaciar');
 Route::get('/carrito/contador', [CarritoController::class, 'contador'])->name('carrito.contador');
+
+// Checkout routes
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout/procesar', [CheckoutController::class, 'procesar'])->name('checkout.procesar');
+Route::get('/checkout/exito/{pedido}', [CheckoutController::class, 'exito'])->name('checkout.exito');
+Route::get('/checkout/cancelar/{pedido}', [CheckoutController::class, 'cancelar'])->name('checkout.cancelar');
 
 // Auth routes
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login')->middleware('guest');

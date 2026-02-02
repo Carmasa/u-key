@@ -995,6 +995,39 @@ footer p {
 }
 
 /* ============================================
+   Input Group
+   ============================================ */
+.input-group-text {
+    background: var(--bg-elevated);
+    border-color: var(--border-color);
+    color: var(--text-secondary);
+}
+
+/* ============================================
+   Admin Tables
+   ============================================ */
+.table {
+    --bs-table-bg: #1a1a25;
+    --bs-table-color: var(--text-primary);
+    --bs-table-border-color: var(--border-color);
+    --bs-table-hover-bg: #252535;
+    --bs-table-hover-color: var(--text-primary);
+}
+
+.table tbody tr {
+    background: #1a1a25;
+}
+
+.table tbody tr:hover {
+    background: #252535;
+}
+
+.table td {
+    color: var(--text-primary);
+    border-color: var(--border-color);
+}
+
+/* ============================================
    Card Header
    ============================================ */
 .card-header {

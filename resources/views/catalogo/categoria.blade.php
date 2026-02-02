@@ -75,7 +75,7 @@
                                          style="width: 100%; height: 100%; object-fit: cover;">
                                     @if($producto->destacado)
                                         <span class="badge-destacado">
-                                            <i class="bi bi-star-fill me-1"></i>HOT
+                                            <i class="bi bi-star-fill me-1"></i>DESTACADO
                                         </span>
                                     @endif
                                 </div>

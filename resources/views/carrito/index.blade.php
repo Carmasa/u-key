@@ -139,12 +139,12 @@
                     <div class="card-header">
                         <h5 class="mb-0"><i class="bi bi-receipt me-2"></i>Resumen del Pedido</h5>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" style="color: #c0c0d0;">
                         <!-- Barra de progreso envío gratis -->
                         @if(!$totales['envio_gratis'])
                             <div class="envio-gratis-progress mb-4">
                                 <div class="d-flex justify-content-between mb-2">
-                                    <small><i class="bi bi-truck me-1"></i>Envío gratuito</small>
+                                    <small style="color: #c0c0d0;"><i class="bi bi-truck me-1"></i>Envío gratuito</small>
                                     <small class="text-primary">
                                         ¡Te faltan {{ number_format($totales['faltan_para_envio_gratis'], 2, ',', '.') }}€!
                                     </small>
@@ -153,7 +153,7 @@
                                     <div class="progress-bar bg-primary" 
                                          style="width: {{ min(100, ($totales['subtotal'] / 50) * 100) }}%"></div>
                                 </div>
-                                <small class="text-muted">Envío gratis en pedidos superiores a 50€</small>
+                                <small style="color: #9090a0;">Envío gratis en pedidos superiores a 50€</small>
                             </div>
                         @else
                             <div class="alert alert-success mb-4">
@@ -162,12 +162,12 @@
                             </div>
                         @endif
 
-                        <div class="d-flex justify-content-between mb-2">
+                        <div class="d-flex justify-content-between mb-2" style="color: #c0c0d0;">
                             <span>Subtotal</span>
                             <span>{{ number_format($totales['subtotal'], 2, ',', '.') }}€</span>
                         </div>
                         
-                        <div class="d-flex justify-content-between mb-2">
+                        <div class="d-flex justify-content-between mb-2" style="color: #c0c0d0;">
                             <span>
                                 <i class="bi bi-truck me-1"></i>Envío
                                 @if($totales['envio_gratis'])
@@ -176,7 +176,7 @@
                             </span>
                             <span>
                                 @if($totales['envio_gratis'])
-                                    <del class="text-muted me-1">4,99€</del>
+                                    <del style="color: #9090a0;" class="me-1">4,99€</del>
                                     <span class="text-success">0,00€</span>
                                 @else
                                     {{ number_format($totales['envio'], 2, ',', '.') }}€
@@ -184,19 +184,19 @@
                             </span>
                         </div>
 
-                        <hr>
+                        <hr style="border-color: #3a3a4a;">
 
                         <div class="d-flex justify-content-between mb-4">
-                            <span class="h5 mb-0">Total</span>
+                            <span class="h5 mb-0" style="color: #e0e0e8;">Total</span>
                             <span class="h5 mb-0 precio">{{ number_format($totales['total'], 2, ',', '.') }}€</span>
                         </div>
 
                         <div class="d-grid">
-                            <button class="btn btn-success btn-lg" disabled>
-                                <i class="bi bi-lock me-2"></i>Proceder al Pago
-                            </button>
+                            <a href="{{ route('checkout.index') }}" class="btn btn-success btn-lg">
+                                <i class="bi bi-credit-card me-2"></i>Proceder al Pago
+                            </a>
                             <small class="text-muted text-center mt-2">
-                                <i class="bi bi-shield-check me-1"></i>Pago seguro garantizado
+                                <i class="bi bi-shield-check me-1"></i>Pago seguro con Stripe
                             </small>
                         </div>
                     </div>
