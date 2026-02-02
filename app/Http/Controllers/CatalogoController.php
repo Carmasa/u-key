@@ -11,7 +11,10 @@ class CatalogoController extends Controller
     public function index()
     {
         $categorias = Categoria::all();
-        $productosDestacados = Producto::where('destacado', true)->where('visible', true)->paginate(12);
+        $productosDestacados = Producto::with(['categoria', 'fotos'])
+            ->where('destacado', true)
+            ->where('visible', true)
+            ->paginate(12);
 
         return view('catalogo.index', compact('categorias', 'productosDestacados'));
     }
@@ -21,7 +24,10 @@ class CatalogoController extends Controller
     {
         $categoria = Categoria::where('slug', $slug)->firstOrFail();
         $categorias = Categoria::all();
-        $productos = $categoria->productos()->where('visible', true)->paginate(12);
+        $productos = $categoria->productos()
+            ->with('fotos')
+            ->where('visible', true)
+            ->paginate(12);
 
         return view('catalogo.categoria', compact('categoria', 'productos', 'categorias'));
     }

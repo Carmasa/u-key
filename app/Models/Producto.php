@@ -55,6 +55,13 @@ class Producto extends Model
      */
     public function fotoPrincipal()
     {
+        // Si ya están cargadas las fotos, usar la colección
+        if ($this->relationLoaded('fotos')) {
+            $principal = $this->fotos->where('principal', true)->first();
+            return $principal ?? $this->fotos->first();
+        }
+        
+        // Si no, hacer la query
         return $this->fotos()->where('principal', true)->first() ?? $this->fotos()->first();
     }
 
