@@ -25,35 +25,35 @@
                 <div class="card-header">
                     <h5 class="mb-0"><i class="bi bi-receipt me-2"></i>Detalles del Pedido</h5>
                 </div>
-                <div class="card-body">
+                <div class="card-body" style="color: #c0c0d0;">
                     <div class="row mb-4">
                         <div class="col-md-6">
-                            <p class="mb-1"><strong>Número de Pedido:</strong></p>
+                            <p class="mb-1" style="color: #e0e0e8;"><strong>Número de Pedido:</strong></p>
                             <p class="h4 precio">{{ $pedido->numero_pedido }}</p>
                         </div>
                         <div class="col-md-6 text-md-end">
-                            <p class="mb-1"><strong>Fecha:</strong></p>
-                            <p>{{ $pedido->created_at->format('d/m/Y H:i') }}</p>
+                            <p class="mb-1" style="color: #e0e0e8;"><strong>Fecha:</strong></p>
+                            <p style="color: #c0c0d0;">{{ $pedido->created_at->format('d/m/Y H:i') }}</p>
                         </div>
                     </div>
 
-                    <hr>
+                    <hr style="border-color: #3a3a4a;">
 
-                    <h6 class="mb-3"><i class="bi bi-box-seam me-2"></i>Productos</h6>
+                    <h6 class="mb-3" style="color: #e0e0e8;"><i class="bi bi-box-seam me-2"></i>Productos</h6>
                     @foreach($pedido->productos as $producto)
-                        <div class="d-flex justify-content-between mb-2">
-                            <span>{{ $producto['nombre'] }} <small class="text-muted">x{{ $producto['cantidad'] }}</small></span>
+                        <div class="d-flex justify-content-between mb-2" style="color: #c0c0d0;">
+                            <span>{{ $producto['nombre'] }} <small style="color: #9090a0;">x{{ $producto['cantidad'] }}</small></span>
                             <span>{{ number_format($producto['precio'] * $producto['cantidad'], 2, ',', '.') }}€</span>
                         </div>
                     @endforeach
 
-                    <hr>
+                    <hr style="border-color: #3a3a4a;">
 
-                    <div class="d-flex justify-content-between mb-2">
+                    <div class="d-flex justify-content-between mb-2" style="color: #c0c0d0;">
                         <span>Subtotal</span>
                         <span>{{ number_format($pedido->subtotal, 2, ',', '.') }}€</span>
                     </div>
-                    <div class="d-flex justify-content-between mb-2">
+                    <div class="d-flex justify-content-between mb-2" style="color: #c0c0d0;">
                         <span>Envío</span>
                         <span>
                             @if($pedido->envio == 0)
@@ -64,7 +64,7 @@
                         </span>
                     </div>
                     <div class="d-flex justify-content-between">
-                        <span class="h5">Total</span>
+                        <span class="h5" style="color: #e0e0e8;">Total</span>
                         <span class="h5 precio">{{ number_format($pedido->total, 2, ',', '.') }}€</span>
                     </div>
                 </div>
@@ -76,8 +76,8 @@
                         <div class="card-header">
                             <h6 class="mb-0"><i class="bi bi-person me-2"></i>Datos de Contacto</h6>
                         </div>
-                        <div class="card-body">
-                            <p class="mb-1"><strong>{{ $pedido->nombre_cliente }}</strong></p>
+                        <div class="card-body" style="color: #c0c0d0;">
+                            <p class="mb-1" style="color: #e0e0e8;"><strong>{{ $pedido->nombre_cliente }}</strong></p>
                             <p class="mb-1">{{ $pedido->email_cliente }}</p>
                             <p class="mb-0">{{ $pedido->telefono_cliente }}</p>
                         </div>
@@ -88,7 +88,7 @@
                         <div class="card-header">
                             <h6 class="mb-0"><i class="bi bi-truck me-2"></i>Dirección de Envío</h6>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body" style="color: #c0c0d0;">
                             <p class="mb-0">{{ $pedido->direccion_envio }}</p>
                         </div>
                     </div>
