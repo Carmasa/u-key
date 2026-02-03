@@ -7,6 +7,20 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+        .table-new-order {
+            background-color: #1e4f66 !important; /* Darker soft cyan */
+            font-weight: bold;
+            color: #ffffff;
+        }
+        .table-new-order .text-muted {
+            color: #e0e0e0 !important; /* Light gray for readability on dark background */
+        }
+        .table-transparent, .table-transparent td, .table-transparent th {
+            background-color: transparent !important;
+            color: inherit; /* Ensure text color adapts */
+        }
+    </style>
 </head>
 <body>
     <!-- Navbar -->
@@ -26,6 +40,18 @@
                         <a class="nav-link {{ request()->routeIs('admin.productos.*') ? 'active' : '' }}" 
                            href="{{ route('admin.productos.index') }}">
                             <i class="bi bi-box-seam me-1"></i>Productos
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{ request()->routeIs('admin.pedidos.*') ? 'active' : '' }}" 
+                           href="{{ route('admin.pedidos.index') }}">
+                            <i class="bi bi-receipt me-1"></i>Pedidos
+                            @php
+                                $nuevos = \App\Models\Pedido::nuevos()->count();
+                            @endphp
+                            @if($nuevos > 0)
+                                <span class="badge bg-danger rounded-pill ms-1" style="font-size: 0.7em;">{{ $nuevos }}</span>
+                            @endif
                         </a>
                     </li>
                 </ul>
