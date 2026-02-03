@@ -6,6 +6,8 @@ use App\Models\Carrito;
 use App\Models\Pedido;
 use App\Models\Producto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Stripe\Stripe;
 use Stripe\Checkout\Session as StripeSession;
 
@@ -139,7 +141,7 @@ class CheckoutController extends Controller
         // Crear pedido pendiente
         $pedido = Pedido::create([
             'numero_pedido' => Pedido::generarNumeroPedido(),
-            'usuario_id' => auth()->id(),
+            'usuario_id' => Auth::id(),
             'subtotal' => $subtotal,
             'envio' => $envio,
             'total' => $total,
@@ -186,7 +188,7 @@ class CheckoutController extends Controller
     public function exito(Request $request, Pedido $pedido)
     {
         // Verificar que el pedido pertenece a esta sesión o usuario
-        if ($pedido->session_id !== $this->getSessionId() && $pedido->usuario_id !== auth()->id()) {
+        if ($pedido->session_id !== $this->getSessionId() && $pedido->usuario_id !== Auth::id()) {
             abort(403);
         }
 
@@ -198,7 +200,7 @@ class CheckoutController extends Controller
                 if ($session->payment_status === 'paid') {
                     // Actualizar pedido
                     $pedido->update([
-                        'estado' => 'procesado',
+                        'estado' => \App\Models\Pedido::ESTADO_NUEVO,
                         'stripe_payment_intent' => $session->payment_intent,
                     ]);
 
@@ -213,7 +215,7 @@ class CheckoutController extends Controller
                 }
             } catch (\Exception $e) {
                 // Log error pero mostrar página de éxito igualmente
-                \Log::error('Error verificando pago Stripe: ' . $e->getMessage());
+                Log::error('Error verificando pago Stripe: ' . $e->getMessage());
             }
         }
 
@@ -226,7 +228,7 @@ class CheckoutController extends Controller
     public function cancelar(Pedido $pedido)
     {
         // Verificar que el pedido pertenece a esta sesión
-        if ($pedido->session_id !== $this->getSessionId() && $pedido->usuario_id !== auth()->id()) {
+        if ($pedido->session_id !== $this->getSessionId() && $pedido->usuario_id !== Auth::id()) {
             abort(403);
         }
 

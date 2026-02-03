@@ -37,4 +37,13 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout')->middl
 Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(function () {
     Route::resource('productos', ProductoController::class);
     Route::delete('fotos/{foto}', [App\Http\Controllers\FotoProductoController::class, 'destroy'])->name('fotos.destroy');
+    
+    // Rutas de Pedidos
+    Route::controller(App\Http\Controllers\AdminPedidoController::class)->prefix('pedidos')->name('pedidos.')->group(function () {
+        Route::get('/', 'index')->name('index');
+        Route::get('/{id}', 'show')->name('show');
+        Route::patch('/{id}/estado', 'updateStatus')->name('update-status');
+        Route::get('/{id}/packing-list', 'downloadPackingList')->name('packing-list');
+        Route::get('/{id}/shipping-label', 'downloadShippingLabel')->name('shipping-label');
+    });
 });

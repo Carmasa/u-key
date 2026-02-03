@@ -13,7 +13,7 @@ class Pedido extends Model
         'total',
         'subtotal',
         'envio',
-        'estado',
+        'estado', // Posibles valores: pendiente, nuevo, reparacion, enviado
         'session_id',
         'stripe_session_id',
         'stripe_payment_intent',
@@ -46,5 +46,27 @@ class Pedido extends Model
         } while (self::where('numero_pedido', $numero)->exists());
 
         return $numero;
+    }
+
+    // Constantes de estado
+    const ESTADO_PENDIENTE = 'pendiente';
+    const ESTADO_NUEVO = 'nuevo';
+    const ESTADO_PREPARACION = 'preparacion'; // Usamos 'preparacion' para "En preparación"
+    const ESTADO_ENVIADO = 'enviado';
+
+    /**
+     * Scope para pedidos pendientes (incluye nuevos y pendientes por procesar)
+     */
+    public function scopePendientes($query)
+    {
+        return $query->whereIn('estado', [self::ESTADO_PENDIENTE, self::ESTADO_NUEVO]);
+    }
+
+    /**
+     * Scope para pedidos nuevos (no vistos)
+     */
+    public function scopeNuevos($query)
+    {
+        return $query->where('estado', self::ESTADO_NUEVO);
     }
 }
