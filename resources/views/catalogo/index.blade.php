@@ -18,70 +18,173 @@
         </div>
     </section>
 
-    <!-- Productos Destacados -->
-    <section class="mb-5">
-        <div class="section-title">
+        <style>
+            .slider-wrapper {
+                position: relative;
+                padding: 0 40px; /* Espacio para las flechas */
+            }
+            
+            .slider-container {
+                overflow: hidden;
+                width: 100%;
+            }
+            
+            .slider-track {
+                display: flex;
+                transition: transform 0.5s ease-in-out;
+                width: max-content;
+            }
+            
+            .slider-item {
+                width: 300px;
+                padding: 0 15px;
+                flex-shrink: 0;
+            }
+
+            .slider-btn {
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                z-index: 10;
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background: rgba(var(--bs-primary-rgb), 0.1);
+                color: var(--bs-primary);
+                border: 1px solid var(--bs-primary);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+
+            .slider-btn:hover {
+                background: var(--bs-primary);
+                color: white;
+            }
+
+            .slider-btn.prev { left: 0; }
+            .slider-btn.next { right: 0; }
+        </style>
+
+        <div class="section-title d-flex justify-content-between align-items-center">
             <h2>Productos Destacados</h2>
         </div>
         
         @if($productosDestacados->count() > 0)
-            <div class="row">
-                @foreach($productosDestacados as $producto)
-                    <div class="col-md-6 col-lg-3 mb-4">
-                        <div class="card producto-card h-100">
-                            <div class="producto-imagen" style="height: 250px; overflow: hidden;">
-                                <img src="{{ $producto->imagen_url }}" 
-                                     class="card-img-top" alt="{{ $producto->nombre }}"
-                                     style="width: 100%; height: 100%; object-fit: cover;">
-                                @if($producto->destacado)
-                                    <span class="badge-destacado">
-                                        <i class="bi bi-star-fill me-1"></i>DESTACADO
-                                    </span>
-                                @endif
-                            </div>
-                            
-                            <div class="card-body d-flex flex-column">
-                                <span class="badge bg-info mb-2" style="width: fit-content;">
-                                    {{ $producto->categoria->nombre }}
-                                </span>
-                                <h5 class="card-title">{{ $producto->nombre }}</h5>
-                                <p class="card-text small">
-                                    {{ Str::limit($producto->descripcion, 70) }}
-                                </p>
-                                <p class="precio mt-auto">
-                                    {{ number_format($producto->precio, 2, ',', '.') }}€
-                                </p>
-                                
-                                <div class="d-grid gap-2">
-                                    <a href="{{ route('catalogo.detalle', $producto->id) }}" 
-                                       class="btn btn-info">
-                                        <i class="bi bi-eye me-1"></i>Ver detalles
-                                    </a>
-                                    
-                                    @if($producto->stock > 0)
-                                        <form action="{{ route('carrito.agregar') }}" method="POST">
-                                            @csrf
-                                            <input type="hidden" name="producto_id" value="{{ $producto->id }}">
-                                            <input type="hidden" name="cantidad" value="1">
-                                            <button type="submit" class="btn btn-success w-100">
-                                                <i class="bi bi-cart-plus me-1"></i>Añadir al carrito
-                                            </button>
-                                        </form>
-                                    @else
-                                        <button class="btn btn-secondary" disabled>
-                                            <i class="bi bi-x-circle me-1"></i>Sin stock
-                                        </button>
-                                    @endif
+            @if($productosDestacados->count() > 4)
+                <!-- Carrusel JS Infinito (> 4 productos) -->
+                <div class="slider-wrapper">
+                    <button class="slider-btn prev" id="prevBtn"><i class="bi bi-chevron-left"></i></button>
+                    
+                    <div class="slider-container">
+                        <div class="slider-track" id="track">
+                            <!-- Productos originales -->
+                            @foreach($productosDestacados as $producto)
+                                <div class="slider-item">
+                                    @include('catalogo.partials.producto_card', ['producto' => $producto])
                                 </div>
-                            </div>
+                            @endforeach
+                            
+                            <!-- Clones para el efecto infinito (primeros 4 al final) -->
+                            @foreach($productosDestacados->take(4) as $producto)
+                                <div class="slider-item cloned">
+                                    @include('catalogo.partials.producto_card', ['producto' => $producto])
+                                </div>
+                            @endforeach
                         </div>
                     </div>
-                @endforeach
-            </div>
+
+                    <button class="slider-btn next" id="nextBtn"><i class="bi bi-chevron-right"></i></button>
+                </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        const track = document.getElementById('track');
+                        const nextBtn = document.getElementById('nextBtn');
+                        const prevBtn = document.getElementById('prevBtn');
+                        
+                        const itemWidth = 300; // Ancho del item definido en CSS
+                        const totalItems = {{ $productosDestacados->count() }};
+                        const clones = 4;
+                        let currentIndex = 0;
+                        let isTransitioning = false;
+                        
+                        // Auto play
+                        let autoPlay = setInterval(nextSlide, 3000);
+                        
+                        // Pause on hover
+                        const wrapper = document.querySelector('.slider-wrapper');
+                        wrapper.addEventListener('mouseenter', () => clearInterval(autoPlay));
+                        wrapper.addEventListener('mouseleave', () => autoPlay = setInterval(nextSlide, 3000));
+
+                        function updateTrack() {
+                            track.style.transition = 'transform 0.5s ease-in-out';
+                            track.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+                        }
+
+                        function nextSlide() {
+                            if (isTransitioning) return;
+                            isTransitioning = true;
+                            currentIndex++;
+                            updateTrack();
+                            
+                            // Si llega al final de los clones
+                            if (currentIndex >= totalItems) {
+                                setTimeout(() => {
+                                    track.style.transition = 'none';
+                                    currentIndex = 0;
+                                    track.style.transform = `translateX(0)`;
+                                    isTransitioning = false;
+                                }, 500); // Esperar a que termine la transición
+                            } else {
+                                setTimeout(() => isTransitioning = false, 500);
+                            }
+                        }
+
+                        function prevSlide() {
+                            if (isTransitioning) return;
+                            isTransitioning = true;
+                            
+                            if (currentIndex === 0) {
+                                // Saltar al final de los clones instantáneamente
+                                track.style.transition = 'none';
+                                currentIndex = totalItems;
+                                track.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+                                
+                                // Luego mover al anterior con animación
+                                setTimeout(() => {
+                                    track.style.transition = 'transform 0.5s ease-in-out';
+                                    currentIndex--;
+                                    track.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+                                    setTimeout(() => isTransitioning = false, 500);
+                                }, 10);
+                            } else {
+                                currentIndex--;
+                                updateTrack();
+                                setTimeout(() => isTransitioning = false, 500);
+                            }
+                        }
+
+                        nextBtn.addEventListener('click', nextSlide);
+                        prevBtn.addEventListener('click', prevSlide);
+                    });
+                </script>
+            @else
+                <!-- Grid estático (<= 4 productos) -->
+                <div class="row">
+                    @foreach($productosDestacados as $producto)
+                        <div class="col-md-6 col-lg-3 mb-4">
+                            @include('catalogo.partials.producto_card', ['producto' => $producto])
+                        </div>
+                    @endforeach
+                </div>
+            @endif
             
-            <!-- Paginación -->
-            <div class="d-flex justify-content-center mt-4">
-                {{ $productosDestacados->links() }}
+            <!-- Link Ver Todos -->
+            <div class="text-center mt-3">
+                 <a href="{{ route('catalogo.index') }}" class="btn btn-link text-decoration-none">Ver todos los productos <i class="bi bi-arrow-right"></i></a>
             </div>
         @else
             <div class="alert alert-info">

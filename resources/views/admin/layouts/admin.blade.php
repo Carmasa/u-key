@@ -21,8 +21,9 @@
             color: inherit; /* Ensure text color adapts */
         }
     </style>
+    </style>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
@@ -111,7 +112,7 @@
     @endif
 
     <!-- Main Content -->
-    <main class="py-4">
+    <main class="py-4 flex-grow-1">
         @yield('content')
     </main>
 
