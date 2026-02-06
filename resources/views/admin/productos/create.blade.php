@@ -4,20 +4,20 @@
 
 @section('content')
 <div class="container">
-    <div class="mb-4">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="{{ route('admin.productos.index') }}"><i class="bi bi-box-seam me-1"></i>Productos</a>
-                </li>
-                <li class="breadcrumb-item active">Crear nuevo</li>
-            </ol>
-        </nav>
-        <h1><i class="bi bi-plus-circle me-2"></i>Crear Nuevo Producto</h1>
-    </div>
-
-    <div class="row">
+    <div class="row justify-content-center">
         <div class="col-lg-8">
+            <div class="mb-4">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('admin.productos.index') }}"><i class="bi bi-box-seam me-1"></i>Productos</a>
+                        </li>
+                        <li class="breadcrumb-item active">Crear nuevo</li>
+                    </ol>
+                </nav>
+                <h1><i class="bi bi-plus-circle me-2"></i>Crear Nuevo Producto</h1>
+            </div>
+
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0"><i class="bi bi-pencil-square me-2"></i>Información del producto</h5>

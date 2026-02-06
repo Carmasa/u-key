@@ -73,6 +73,12 @@
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
+                                    <a class="dropdown-item" href="{{ route('user.pedidos.index') }}">
+                                        <i class="bi bi-box-seam me-2"></i>Mis Pedidos
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
                                     <form action="{{ route('logout') }}" method="POST" class="d-inline">
                                         @csrf
                                         <button class="dropdown-item" type="submit">

@@ -15,7 +15,7 @@
             <a href="{{ route('admin.pedidos.packing-list', $pedido->id) }}" target="_blank" class="btn btn-outline-secondary">
                 <i class="bi bi-file-earmark-text"></i> Lista de Artículos
             </a>
-            <a href="{{ route('admin.pedidos.shipping-label', $pedido->id) }}" target="_blank" class="btn btn-outline-dark">
+            <a href="{{ route('admin.pedidos.shipping-label', $pedido->id) }}" target="_blank" class="btn btn-outline-secondary">
                 <i class="bi bi-truck"></i> Etiqueta Envío
             </a>
         </div>
@@ -45,7 +45,22 @@
                                     <tr>
                                         <td>
                                             <div class="d-flex align-items-center">
-                                                {{-- Si tuviéramos imagen, iría aquí --}}
+                                                @php
+                                                    $productoModel = \App\Models\Producto::find($item['id']);
+                                                @endphp
+                                                
+                                                @if($productoModel)
+                                                    <img src="{{ $productoModel->imagen_url }}" 
+                                                         alt="{{ $item['nombre'] }}" 
+                                                         class="rounded me-3" 
+                                                         style="width: 48px; height: 48px; object-fit: cover;">
+                                                @else
+                                                    <div class="bg-secondary rounded me-3 d-flex align-items-center justify-content-center" 
+                                                         style="width: 48px; height: 48px;">
+                                                        <i class="bi bi-box text-white"></i>
+                                                    </div>
+                                                @endif
+                                                
                                                 <div>
                                                     <div class="fw-bold">{{ $item['nombre'] ?? 'Producto desconocid' }}</div>
                                                     {{-- <small class="text-muted">SKU: XYZ</small> --}}
