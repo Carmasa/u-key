@@ -47,3 +47,8 @@ Route::middleware(['auth', 'isAdmin'])->prefix('admin')->name('admin.')->group(f
         Route::get('/{id}/shipping-label', 'downloadShippingLabel')->name('shipping-label');
     });
 });
+
+// Rutas autenticadas de usuario
+Route::middleware(['auth'])->group(function () {
+    Route::get('/perfil/pedidos', [App\Http\Controllers\UserPedidoController::class, 'index'])->name('user.pedidos.index');
+});
