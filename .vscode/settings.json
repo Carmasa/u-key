@@ -1,0 +1,12 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^cd \"c:\\\\Users\\\\Sánchez\\\\Desktop\\\\ukey\\\\u-key 2\" ; php artisan migrate$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd \"c:\\\\Users\\\\Sánchez\\\\Desktop\\\\ukey\\\\u-key 2\" ; php artisan cache:clear ; php artisan view:clear$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
