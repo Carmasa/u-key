@@ -1,6 +1,19 @@
 Changelog
 =========
 
+## 2.1.4
+
+### Fixed
+
+- Use custom message for more internal calls
+
+## 2.1.3
+
+### Fixed
+
+- Corrected `isList` type documentation
+- Corrected `isAOf`, `isInstanceOf`, etc type documentation
+
 ## 2.1.2
 
 ### Fixed

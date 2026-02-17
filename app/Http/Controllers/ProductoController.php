@@ -75,13 +75,20 @@ class ProductoController extends Controller
         // Crear el producto
         $producto = Producto::create($validated);
 
-        // Manejar múltiples imágenes
+        // Manejar múltiples imágenes: codificar a base64
         if ($request->hasFile('fotos')) {
             $orden = 0;
             foreach ($request->file('fotos') as $foto) {
-                $fotoPath = $foto->store('productos', 'public');
+                // Paso 1: Leer archivo binario
+                $contenidoBinario = file_get_contents($foto->getRealPath());
+                
+                // Paso 2: Convertir a base64 (CRÍTICO)
+                $base64Encoded = base64_encode($contenidoBinario);
+                
+                // Paso 3: Guardar base64 en BD (NO binario puro)
                 $producto->fotos()->create([
-                    'nombre_archivo' => basename($fotoPath),
+                    'nombre_archivo' => $foto->getClientOriginalName(),
+                    'datos_imagen' => $base64Encoded,  // ✅ BASE64
                     'orden' => $orden,
                     'principal' => $orden === 0, // Primera foto es la principal
                 ]);
@@ -129,13 +136,20 @@ class ProductoController extends Controller
 
         $producto->update($validated);
 
-        // Manejar múltiples imágenes
+        // Manejar múltiples imágenes: codificar a base64
         if ($request->hasFile('fotos')) {
             foreach ($request->file('fotos') as $foto) {
-                $fotoPath = $foto->store('productos', 'public');
+                // Paso 1: Leer archivo binario
+                $contenidoBinario = file_get_contents($foto->getRealPath());
+                
+                // Paso 2: Convertir a base64 (CRÍTICO)
+                $base64Encoded = base64_encode($contenidoBinario);
+                
+                // Paso 3: Guardar base64 en BD (NO binario puro)
                 $maxOrden = $producto->fotos()->max('orden') ?? 0;
                 $producto->fotos()->create([
-                    'nombre_archivo' => basename($fotoPath),
+                    'nombre_archivo' => $foto->getClientOriginalName(),
+                    'datos_imagen' => $base64Encoded,  // ✅ BASE64
                     'orden' => $maxOrden + 1,
                     'principal' => false,
                 ]);

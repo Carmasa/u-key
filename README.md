@@ -106,40 +106,4 @@ erDiagram
 
 Interacciones principales de los actores con el sistema.
 
-```mermaid
-graph LR
-    User((Cliente))
-    Admin((Administrador))
-
-    subgraph "Tienda Pública"
-        C1[Ver Catálogo]
-        C2[Añadir al Carrito]
-        C3[Realizar Pago/Checkout]
-        C4[Registro / Login]
-    end
-
-    subgraph "Área Privada"
-        P1[Ver Mis Pedidos]
-        P2[Gestionar Perfil]
-    end
-
-    subgraph "Panel de Administración"
-        A1[Gestionar Pedidos]
-        A2[Cambiar Estados]
-        A3[Imprimir Documentos]
-        A4[CRUD Productos]
-    end
-
-    User --> C1
-    User --> C2
-    User --> C3
-    User --> C4
-    User --> P1
-    User --> P2
-
-    Admin --> A1
-    Admin --> A2
-    Admin --> A3
-    Admin --> A4
-    Admin --> C1
-```
+![U-Key - Diagrama de Casos de Uso](ukey-DiagramaCasosdeUso.png)

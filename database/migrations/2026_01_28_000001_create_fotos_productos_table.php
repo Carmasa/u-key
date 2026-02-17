@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('producto_id')->constrained('productos')->onDelete('cascade');
             $table->string('nombre_archivo');
+            $table->longText('datos_imagen')->nullable(); // Base64 codificado, NO binario puro
             $table->integer('orden')->default(0);
             $table->boolean('principal')->default(false);
             $table->timestamps();

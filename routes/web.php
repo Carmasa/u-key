@@ -6,6 +6,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\CarritoController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\FotoProductoController;
+
+// ✅ RUTA PÚBLICA: Servir imágenes BLOB
+Route::get('/img/foto/{foto}', [FotoProductoController::class, 'servir'])->name('foto.servir');
 
 // Catalogo routes
 Route::get('/', [CatalogoController::class, 'index'])->name('catalogo.index');
