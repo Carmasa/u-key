@@ -7,9 +7,7 @@ use Illuminate\Http\Request;
 
 class AdminPedidoController extends Controller
 {
-    /**
-     * Muestra la lista de pedidos con pestañas.
-     */
+    //Muestra la lista de pedidos con pestañas.
     public function index(Request $request)
     {
         // Pestaña activa por defecto
@@ -36,26 +34,19 @@ class AdminPedidoController extends Controller
 
         // Marcar como vistos si estamos en la pestaña pendientes/ultimos y hay nuevos? 
         // Por simplificación, mantendremos el estado 'nuevo' hasta que el admin interactúe (cambie estado o entre al detalle).
-
         return view('admin.pedidos.index', compact('ultimos', 'pendientes', 'todos', 'tab', 'search', 'countNuevos'));
     }
 
-    /**
-     * Muestra el detalle de un pedido.
-     */
+    //Muestra el detalle de un pedido.
     public function show($id)
     {
         $pedido = Pedido::findOrFail($id);
         
         // Si el pedido es "nuevo", lo pasamos a "pendiente" al verlo (opcional, o dejar manual)
-        // Para este caso, el usuario pidió "Botón de estado...", así que mejor manual o al procesar.
-        
         return view('admin.pedidos.show', compact('pedido'));
     }
 
-    /**
-     * Actualiza el estado del pedido.
-     */
+    //Actualiza el estado del pedido.
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
@@ -68,9 +59,7 @@ class AdminPedidoController extends Controller
         return redirect()->back()->with('success', 'Estado del pedido actualizado correctamente.');
     }
 
-    /**
-     * Genera vista de impresión para lista de artículos (Packing List).
-     */
+    //Genera vista de impresión para lista de artículos (Packing List).
     public function downloadPackingList($id)
     {
         $pedido = Pedido::findOrFail($id);
@@ -78,9 +67,7 @@ class AdminPedidoController extends Controller
         return view('admin.pedidos.print', compact('pedido', 'type'));
     }
 
-    /**
-     * Genera vista de impresión para etiqueta de envío.
-     */
+    // Genera vista de impresión para etiqueta de envío.
     public function downloadShippingLabel($id)
     {
         $pedido = Pedido::findOrFail($id);

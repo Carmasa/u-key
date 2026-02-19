@@ -18,17 +18,13 @@ class CheckoutController extends Controller
         Stripe::setApiKey(config('services.stripe.secret'));
     }
 
-    /**
-     * Obtener el session_id del carrito
-     */
+    //Obtener el session_id del carrito
     private function getSessionId()
     {
         return session()->getId();
     }
 
-    /**
-     * Obtener items del carrito actual
-     */
+    //Obtener items del carrito actual
     private function getCarritoItems()
     {
         return Carrito::where('session_id', $this->getSessionId())
@@ -36,9 +32,7 @@ class CheckoutController extends Controller
             ->get();
     }
 
-    /**
-     * Mostrar página de checkout
-     */
+    //Mostrar página de checkout
     public function index()
     {
         $items = $this->getCarritoItems();
@@ -63,9 +57,7 @@ class CheckoutController extends Controller
         return view('checkout.index', compact('items', 'subtotal', 'envio', 'total'));
     }
 
-    /**
-     * Procesar el checkout y crear sesión de Stripe
-     */
+    // Procesar el checkout y crear sesión de Stripe
     public function procesar(Request $request)
     {
         $request->validate([
@@ -182,9 +174,7 @@ class CheckoutController extends Controller
         }
     }
 
-    /**
-     * Página de éxito después del pago
-     */
+    // Página de éxito después del pago
     public function exito(Request $request, Pedido $pedido)
     {
         // Verificar que el pedido pertenece a esta sesión o usuario
@@ -222,9 +212,7 @@ class CheckoutController extends Controller
         return view('checkout.exito', compact('pedido'));
     }
 
-    /**
-     * Página de cancelación
-     */
+    //Página de cancelación
     public function cancelar(Pedido $pedido)
     {
         // Verificar que el pedido pertenece a esta sesión

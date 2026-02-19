@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\FotoProducto;
+use App\Models\Usuario;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 
 class FotoProductoController extends Controller
 {
@@ -41,7 +43,7 @@ class FotoProductoController extends Controller
     public function destroy(FotoProducto $foto)
     {
         // Verificar que el usuario sea admin
-        if (!auth()->check() || !auth()->user()->isAdmin()) {
+        if (!Auth::check() || Auth::user()->rol !== 'Admin') {
             abort(403);
         }
 

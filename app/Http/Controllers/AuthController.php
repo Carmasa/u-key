@@ -9,25 +9,19 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    /**
-     * Show login form
-     */
+    // Mostrar el formulario de login
     public function showLogin()
     {
         return view('auth.login');
     }
 
-    /**
-     * Show register form
-     */
+    // Mostrar el formulario de registro
     public function showRegister()
     {
         return view('auth.register');
     }
 
-    /**
-     * Handle login
-     */
+    // Manejar login
     public function login(Request $request)
     {
         $credentials = $request->validate([
@@ -45,9 +39,7 @@ class AuthController extends Controller
         ])->onlyInput('email');
     }
 
-    /**
-     * Handle register
-     */
+    // Manejar registro
     public function register(Request $request)
     {
         $validated = $request->validate([
@@ -67,9 +59,7 @@ class AuthController extends Controller
         return redirect('/')->with('success', 'Registro completado correctamente');
     }
 
-    /**
-     * Handle logout
-     */
+    // Manejar logout
     public function logout(Request $request)
     {
         Auth::guard('web')->logout();

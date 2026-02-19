@@ -8,17 +8,13 @@ use Illuminate\Http\Request;
 
 class CarritoController extends Controller
 {
-    /**
-     * Obtener el session_id del carrito
-     */
+    //Obtener el session_id del carrito
     private function getSessionId()
     {
         return session()->getId();
     }
 
-    /**
-     * Obtener items del carrito actual
-     */
+    //Obtener items del carrito actual
     private function getCarritoItems()
     {
         return Carrito::where('session_id', $this->getSessionId())
@@ -26,9 +22,7 @@ class CarritoController extends Controller
             ->get();
     }
 
-    /**
-     * Calcular totales del carrito
-     */
+    //Calcular totales del carrito
     private function calcularTotales($items)
     {
         $subtotal = $items->sum(function ($item) {
@@ -48,9 +42,7 @@ class CarritoController extends Controller
         ];
     }
 
-    /**
-     * Mostrar el carrito
-     */
+    //Mostrar el carrito
     public function index()
     {
         $items = $this->getCarritoItems();
@@ -59,9 +51,7 @@ class CarritoController extends Controller
         return view('carrito.index', compact('items', 'totales'));
     }
 
-    /**
-     * Añadir producto al carrito
-     */
+    //Añadir producto al carrito
     public function agregar(Request $request)
     {
         $request->validate([
@@ -114,9 +104,7 @@ class CarritoController extends Controller
         return back()->with('success', '¡Producto añadido al carrito!');
     }
 
-    /**
-     * Actualizar cantidad de un item
-     */
+    //Actualizar cantidad de un item
     public function actualizar(Request $request, Carrito $carrito)
     {
         // Verificar que el item pertenece a esta sesión
@@ -142,9 +130,7 @@ class CarritoController extends Controller
         return back()->with('success', 'Cantidad actualizada.');
     }
 
-    /**
-     * Eliminar item del carrito
-     */
+    // Eliminar item del carrito
     public function eliminar(Carrito $carrito)
     {
         // Verificar que el item pertenece a esta sesión
@@ -157,9 +143,7 @@ class CarritoController extends Controller
         return back()->with('success', 'Producto eliminado del carrito.');
     }
 
-    /**
-     * Vaciar el carrito completo
-     */
+    //Vaciar el carrito completo
     public function vaciar()
     {
         Carrito::where('session_id', $this->getSessionId())->delete();
@@ -167,9 +151,8 @@ class CarritoController extends Controller
         return back()->with('success', 'Carrito vaciado.');
     }
 
-    /**
-     * Obtener el número de items en el carrito (para AJAX)
-     */
+    //Obtener el número de items en el carrito (para AJAX)
+
     public function contador()
     {
         $count = Carrito::where('session_id', $this->getSessionId())->sum('cantidad');

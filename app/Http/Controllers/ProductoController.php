@@ -8,6 +8,7 @@ use App\Http\Requests\StoreProductoRequest;
 use App\Http\Requests\UpdateProductoRequest;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class ProductoController extends Controller
 {
@@ -126,7 +127,7 @@ class ProductoController extends Controller
         $validated['visible'] = (bool) $request->input('visible', 0);
 
         // Log para debuggear
-        \Log::info('Actualizar producto', [
+        Log::info('Actualizar producto', [
             'producto_id' => $producto->id,
             'destacado' => $request->input('destacado'),
             'visible' => $request->input('visible'),
